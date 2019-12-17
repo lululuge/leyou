@@ -2,6 +2,7 @@ package com.leyou.service;
 
 import com.leyou.domain.Brand;
 import com.leyou.vo.PageResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,5 +25,6 @@ public interface BrandService {
      * @param brand
      * @param cids
      */
+    @Transactional
     void saveBrand(Brand brand, List<Long> cids);
 }

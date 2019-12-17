@@ -66,13 +66,16 @@ public class BrandServiceImpl implements BrandService {
     public void saveBrand(Brand brand, List<Long> cids) {
         // 在品牌表中实现新增
         brand.setId(null);
-        int count = brandDao.insert(brand);
+        int count = brandDao.insert(brand); // 此步会在brand表中自动生成id
         if (count != 1) {
             throw new LyException(ExceptionEnum.BRAND_SAVE_ERROR);
         }
         // 在中间表中实现新增
         for (Long cid : cids) {
-
+            count = brandDao.insertCategoryBrand(cid, brand.getId());
+            if (count != 1) {
+                throw new LyException(ExceptionEnum.BRAND_SAVE_ERROR);
+            }
         }
     }
 }

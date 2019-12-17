@@ -35,4 +35,26 @@ public class CategoryController {
         categoryService.updateCategory(category);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
+
+    /**
+     * 新增分类(注意此功能存在一个bug，点击新增按钮之后需要手动刷新再进行名称修改)
+     * @param category
+     * @return
+     */
+    @PostMapping
+    public ResponseEntity<Void> saveCategory(Category category) {
+        categoryService.saveCategory(category);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    /**
+     * 删除分类
+     * @param id
+     * @return
+     */
+    @DeleteMapping("cid/{cid}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable("cid") Long id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
