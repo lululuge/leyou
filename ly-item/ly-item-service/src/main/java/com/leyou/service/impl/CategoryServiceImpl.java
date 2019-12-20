@@ -58,8 +58,8 @@ public class CategoryServiceImpl implements CategoryService {
          * 1.将新增节点数据插入到数据库中
          * 2.将插入节点的父节点的isParent属性设置为true
          */
-        // 插入新增节点
-        category.setId(null);
+        // 插入新增节点(此处手动设置id，为了防止删除了最后一条数据，下一次自增长的id不连续)
+        category.setId(categoryDao.queryLastCategory().get(0).getId() + 1);
         categoryDao.insert(category);
         // 设置父节点
         Category parent = new Category();
@@ -94,6 +94,22 @@ public class CategoryServiceImpl implements CategoryService {
                categoryDao.deleteByCategoryIdInCategoryBrand(leafNode.getId());
            }
 
+       } else {
+           // 不是父节点
+           // 先删除该结点
+           categoryDao.delete(currentNode);
+           // 维护中间表
+           categoryDao.deleteByCategoryIdInCategoryBrand(currentNode.getId());
+           // 判断该结点的父结点的子结点个数是否为0
+           Category parentNode = categoryDao.selectByPrimaryKey(currentNode.getParentId());
+           // 查询子节点个数
+           List<Category> childNodes = new ArrayList<Category>();
+           queryChildNodes(parentNode, childNodes);
+           int childNodesNum = childNodes.size() - 1;
+           if (childNodesNum == 0) {
+               // 若子节点个数为0，设置其isParent属性为false
+               parentNode.setIsParent(false);
+           }
        }
     }
 
@@ -132,6 +148,22 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * 查询表中最后一条商品分类
+     * @return
+     */
+    @Override
+    public List<Category> queryLastCategory() {
+        return categoryDao.queryLastCategory();
+    }
 
-
+    /**
+     * 根据品牌id查询该品牌的分类信息（用于修改品牌时的数据回显）
+     * @param bid
+     * @return
+     */
+    @Override
+    public List<Category> queryCategoryByBrandId(Long bid) {
+        return categoryDao.queryCategoryByBrandId(bid);
+    }
 }

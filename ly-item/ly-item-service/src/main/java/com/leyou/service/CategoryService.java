@@ -33,4 +33,17 @@ public interface CategoryService {
      */
     @Transactional
     void deleteCategory(Long id);
+
+    /**
+     * 查询表中最后一条商品分类
+     * @return
+     */
+    List<Category> queryLastCategory();
+
+    /**
+     * 根据品牌id查询该品牌的分类信息（用于修改品牌时的数据回显）
+     * @param bid
+     * @return
+     */
+    List<Category> queryCategoryByBrandId(Long bid);
 }

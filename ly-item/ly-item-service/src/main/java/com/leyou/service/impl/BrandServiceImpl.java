@@ -78,4 +78,34 @@ public class BrandServiceImpl implements BrandService {
             }
         }
     }
+
+    /**
+     * 删除品牌
+     * @param id
+     */
+    @Override
+    public void deleteBrand(Long id) {
+        // 先删除指定品牌
+        brandDao.deleteByPrimaryKey(id);
+        // 再维护中间表
+        brandDao.deleteByBrandIdInCategoryBrand(id);
+    }
+
+    /**
+     * 编辑品牌
+     * @param brand
+     * @param cids
+     */
+    @Override
+    public void editBrand(Brand brand, List<Long> cids) {
+        // 先更新品牌表
+        brandDao.updateByPrimaryKeySelective(brand);
+        // 然后维护中间表
+        // 删除该品牌在中间表中与原有分类的对应关系
+        brandDao.deleteByBrandIdInCategoryBrand(brand.getId());
+        for (Long cid : cids) {
+            // 在中间表中添加新的对应关系
+            brandDao.insertCategoryBrand(cid, brand.getId());
+        }
+    }
 }

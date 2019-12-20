@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,5 +47,28 @@ public class BrandController {
     public ResponseEntity<Void> saveBrand(Brand brand, @RequestParam("cids") List<Long> cids) {
         brandService.saveBrand(brand, cids);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 删除品牌
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/bid/{bid}")
+    public ResponseEntity<Void> deleteBrand(@PathVariable("bid") Long id) {
+        brandService.deleteBrand(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * 编辑品牌
+     * @param brand
+     * @param cids
+     * @return
+     */
+    @PutMapping
+    public ResponseEntity<Void> editBrand(Brand brand, @RequestParam("cids") List<Long> cids) {
+        brandService.editBrand(brand, cids);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

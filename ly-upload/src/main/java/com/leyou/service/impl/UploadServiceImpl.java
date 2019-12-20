@@ -42,15 +42,15 @@ public class UploadServiceImpl implements UploadService {
                 throw new LyException(ExceptionEnum.INVALID_FILE_TYPE);
             }
             // 设置文件保存路径
-            File dest = new File("C:\\Users\\34759\\Desktop\\leyou_upload_image", file.getOriginalFilename());
+            File dest = new File("C:\\Users\\34759\\Desktop\\javaweb\\leyou\\upload", file.getOriginalFilename());
             // 保存文件到本地
             file.transferTo(dest);
+            // 返回url
+            return "http://image.leyou.com/upload/" + file.getOriginalFilename();
         } catch (IOException e) {
             // 上传失败
             log.error("文件上传失败！", e);
             throw new LyException(ExceptionEnum.UPLOAD_FILE_ERROR);
         }
-        // 返回文件路径
-        return null;
     }
 }

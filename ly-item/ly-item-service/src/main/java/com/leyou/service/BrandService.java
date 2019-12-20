@@ -27,4 +27,18 @@ public interface BrandService {
      */
     @Transactional
     void saveBrand(Brand brand, List<Long> cids);
+
+    /**
+     * 删除品牌
+     * @param id
+     */
+    @Transactional
+    void deleteBrand(Long id);
+
+    /**
+     * 编辑品牌
+     * @param brand
+     * @param cids
+     */
+    void editBrand(Brand brand, List<Long> cids);
 }
